@@ -6,44 +6,35 @@
 using namespace std;
 
 struct Alumno{
-    /* Alumno(){}
+    Alumno(){}
     Alumno(string _codigo, string _nombre, string _apellidos , string _carrera){
-        for(int i = 0; i<sizeof(codigo); i++){
+        for(int i = 0; i<5; i++){
             if(i < _codigo.size()) codigo[i] = _codigo[i];
             else codigo[i] = ' ';
         }
-        for(int i = 0; i<sizeof(nombre); i++){
+        for(int i = 0; i<11; i++){
             if(i < _nombre.size()) nombre[i] = _nombre[i];
             else nombre[i] = ' ';
         }
-        for(int i = 0; i<sizeof(apellidos); i++){
+        for(int i = 0; i<20; i++){
             if(i < _apellidos.size()) apellidos[i] = _apellidos[i];
             else apellidos[i] = ' ';
         }
-        for(int i = 0; i<sizeof(carrera); i++){
+        for(int i = 0; i<15; i++){
             if(i < _carrera.size()) carrera[i] = _carrera[i];
             else carrera[i] = ' ';
         }
-    } */
+    }
     char codigo [5];
     char nombre [11];
     char apellidos [20];
     char carrera [15];
 };
 
-ostream& operator<<(ostream& out, Alumno a){
-    int lCod = strlen(a.codigo), lNom = strlen(a.nombre), lApe = strlen(a.apellidos), lCar = strlen(a.carrera);
-    for(int i = 0; i<sizeof(Alumno::codigo)-lCod; i++) a.codigo[lCod+i] = ' ';
-    // a.codigo[sizeof(Alumno::codigo)-1] = '\0';
+ostream& operator<<(ostream& out, Alumno& a){
     out.write(a.codigo, sizeof(Alumno::codigo));
-    for(int i = 0; i<sizeof(Alumno::nombre)-lNom; i++) a.nombre[lNom+i] = ' ';
-    // a.nombre[sizeof(Alumno::nombre)-1] = '\0';
     out.write(a.nombre, sizeof(Alumno::nombre));
-    for(int i = 0; i<sizeof(Alumno::apellidos)-lApe; i++) a.apellidos[lApe+i] = ' ';
-    // a.apellidos[sizeof(Alumno::apellidos)-1] = '\0';
     out.write(a.apellidos, sizeof(Alumno::apellidos));
-    for(int i = 0; i<sizeof(Alumno::carrera)-lCar; i++) a.carrera[lCar+i] = ' ';
-    // a.carrera[sizeof(Alumno::carrera)-1] = '\0';
     out.write(a.carrera, sizeof(Alumno::carrera));
     out.put('\n');
     out.flush();
@@ -55,7 +46,7 @@ istream& operator>>(istream& is, Alumno& a){
     is.read(a.nombre, sizeof(Alumno::nombre));
     is.read(a.apellidos, sizeof(Alumno::apellidos));
     is.read(a.carrera, sizeof(Alumno::carrera));
-    is.get();
+    is.ignore(1);
     return is;
 }
 
@@ -70,9 +61,8 @@ public:
         ifstream archivo;
         archivo.open(path, ios::in);
         vector<Alumno> result;
-        while(archivo.peek() != EOF){
-            Alumno temp;
-            archivo>>temp;
+        Alumno temp;
+        while(archivo>>temp){
             result.push_back(temp);
         }
         archivo.close();
@@ -87,10 +77,11 @@ public:
     Alumno readRecord(int pos){
         ifstream archivo;
         archivo.open(path, ios::in);
-        for (int i = 0; i < pos; i++){
-            archivo.ignore(sizeof(Alumno)+1);
-        }
-        if(archivo.peek() == EOF) throw("No existe el registro");
+
+        archivo.seekg(0, archivo.end);
+        if(archivo.tellg() <= pos*(sizeof(Alumno)+1)) throw("No existe ese registro");
+
+        archivo.seekg(pos*(sizeof(Alumno)+1), archivo.beg);
         Alumno result;
         archivo>>result;
         archivo.close();
@@ -106,16 +97,28 @@ int main(){
     try{
         // Crear archivos
         auto f = FixedRecord("datos1.txt");
+        
+        // AGREGAR REGISTROS
+        f.add(Alumno{"0001","Howard","Paredes Zegarra", "Computacion"});    
+        f.add(Alumno{"0002","Penny","Vargas Cordero","Industrial"});
+        f.add(Alumno{"0003","Sheldon","Cooper Vega","Mecatronica"});
+        f.add(Alumno{"0004","Pamela","Vargas Cordero","Industrial"});
+        f.add(Alumno{"0005","Vanesa","Cooper Quizpe","Mecatronica"});
+        f.add(Alumno{"0006","Jesus","Vega Cordero","Industrial"});
+        f.add(Alumno{"0007","Heider","Sanchez Quizpe","Mecatronica"});
+        f.add(Alumno{"0008","Facundo","Gimenez Velasco","Informatica"});
+        f.add(Alumno{"0009", "Facundo", "Gimenez Velasco", "Informatica"});
+        
         // IMPRIMIR TODOS LOS REGISTRO
-        for(auto i: f.load()) cout<<i;
-        // AGREGAR REGISTRO
-        Alumno a1{"0009", "Facundo", "Gimenez Velasco", "Informatica"};
-        f.add(a1);
+        auto av = f.load();
+        for(auto i: av) cout<<i;
+        cout<<endl;
+        
         // LEER REGISTRO 5
-        auto a2 = f.readRecord(4);
+        auto a2 = f.readRecord(5);
         cout<<a2;
     }
-    catch(char const* a){
+    catch(const char* a){
         cout<<a<<endl;
     }
     

@@ -69,4 +69,6 @@ class FixedRecord{
 };
 
 int main(){
+    FixedRecord fr("datos2.dat");
+    fr.add(Alumno{"a101", "grover", "nolberto solano", "ciencia", 5, 9832.12});
 }

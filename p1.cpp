@@ -6,7 +6,7 @@
 using namespace std;
 
 struct Alumno{
-    Alumno(){}
+    /* Alumno(){}
     Alumno(string _codigo, string _nombre, string _apellidos , string _carrera){
         for(int i = 0; i<sizeof(codigo); i++){
             if(i < _codigo.size()) codigo[i] = _codigo[i];
@@ -24,17 +24,26 @@ struct Alumno{
             if(i < _carrera.size()) carrera[i] = _carrera[i];
             else carrera[i] = ' ';
         }
-    }
+    } */
     char codigo [5];
     char nombre [11];
     char apellidos [20];
     char carrera [15];
 };
 
-ostream& operator<<(ostream& out, Alumno& a){
+ostream& operator<<(ostream& out, Alumno a){
+    int lCod = strlen(a.codigo), lNom = strlen(a.nombre), lApe = strlen(a.apellidos), lCar = strlen(a.carrera);
+    for(int i = 0; i<sizeof(Alumno::codigo)-lCod; i++) a.codigo[lCod+i] = ' ';
+    // a.codigo[sizeof(Alumno::codigo)-1] = '\0';
     out.write(a.codigo, sizeof(Alumno::codigo));
+    for(int i = 0; i<sizeof(Alumno::nombre)-lNom; i++) a.nombre[lNom+i] = ' ';
+    // a.nombre[sizeof(Alumno::nombre)-1] = '\0';
     out.write(a.nombre, sizeof(Alumno::nombre));
+    for(int i = 0; i<sizeof(Alumno::apellidos)-lApe; i++) a.apellidos[lApe+i] = ' ';
+    // a.apellidos[sizeof(Alumno::apellidos)-1] = '\0';
     out.write(a.apellidos, sizeof(Alumno::apellidos));
+    for(int i = 0; i<sizeof(Alumno::carrera)-lCar; i++) a.carrera[lCar+i] = ' ';
+    // a.carrera[sizeof(Alumno::carrera)-1] = '\0';
     out.write(a.carrera, sizeof(Alumno::carrera));
     out.put('\n');
     out.flush();

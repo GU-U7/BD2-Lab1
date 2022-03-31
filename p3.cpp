@@ -86,7 +86,7 @@ class VariableRecord{
         archivoCab.close();
         return result;
     }
-    Alumno readReacord(int pos){
+    Alumno readRecord(int pos){
         ifstream archivo(pathCab, ios::in | ios::binary);
         archivo.seekg(pos*(sizeof(Cabecera)), archivo.beg);
         Cabecera lectura;
@@ -127,7 +127,7 @@ int main(){
     vr.add(Alumno{"Thony", "Cooper Quizpe", "Computacion", 1850.00});
     vr.add(Alumno{"Cristian", "Cueva", "Informatica", 764.22}); 
     // seleccionar registro n°3
-    auto r2 = vr.readReacord(2);
+    auto r2 = vr.readRecord(2);
     cout<<r2.Nombre<<"&&"<<r2.Apellidos<<"&&"<<r2.Carrera<<"&&"<<r2.mensualidad<<endl;
     cout<<endl;
     // seleccionar todos los registros

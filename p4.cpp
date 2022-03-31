@@ -77,6 +77,10 @@ class VariableRecord{
     Matricula readRecord(int pos){
         int fPos;
         ifstream f(pathCab, ios::in|ios::binary);
+
+        f.seekg(0, f.end);
+        if(f.tellg()<=pos*sizeof(int)) throw("No existe ese registro");
+
         f.seekg(pos*sizeof(int), f.beg);
         f.read((char*) &fPos, sizeof(int));
         f.close();
@@ -92,24 +96,28 @@ class VariableRecord{
 };
 
 int main(){
-    // Crear documentos
-    VariableRecord vr("datos4.dat", "posiciones.dat");
+    try{
+        // Crear documentos
+        VariableRecord vr("datos4.dat", "posiciones.dat");
 
-    // Agregar registros
-    vr.add(Matricula{"A101", 3, 45.32f, "Duda mucho"});
-    vr.add(Matricula{"A10112", 9, -45.32f, "No hace nada"});
-    vr.add(Matricula{"A1", 2, 5.322f, "Llega tarde"});
-    vr.add(Matricula{"A10042", 13, 0.9f, "Es lento"});
+        // Agregar registros
+        vr.add(Matricula{"A101", 3, 45.32f, "Duda mucho"});
+        vr.add(Matricula{"A10112", 9, -45.32f, "No hace nada"});
+        vr.add(Matricula{"A1", 2, 5.322f, "Llega tarde"});
+        vr.add(Matricula{"A10042", 13, 0.9f, "Es lento"});
 
-    // Seleccionar un registro
-    Matricula mt = vr.readRecord(3);
-    cout<<mt.codigo<<" "<<mt.ciclo<<" "<<mt.mensualidad<<" "<<mt.observaciones<<endl;
-    cout<<endl;
+        // Seleccionar un registro
+        Matricula mt = vr.readRecord(2);
+        cout<<mt.codigo<<" "<<mt.ciclo<<" "<<mt.mensualidad<<" "<<mt.observaciones<<endl;
+        cout<<endl;
 
-    // Leer todos los registros
-    auto vm = vr.load();
-    for(auto i: vm)
-        cout<<i.codigo<<" "<<i.ciclo<<" "<<i.mensualidad<<" "<<i.observaciones<<endl;
-        
+        // Leer todos los registros
+        auto vm = vr.load();
+        for(auto i: vm)
+            cout<<i.codigo<<" "<<i.ciclo<<" "<<i.mensualidad<<" "<<i.observaciones<<endl;
+    }
+    catch(char const* c){
+        cout<<c;
+    }
     return 0;
 }

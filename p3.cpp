@@ -88,6 +88,10 @@ class VariableRecord{
     }
     Alumno readRecord(int pos){
         ifstream archivo(pathCab, ios::in | ios::binary);
+
+        archivo.seekg(0, archivo.end);
+        if(archivo.tellg()<=pos*sizeof(Cabecera)) throw("No existe ese registro");
+
         archivo.seekg(pos*(sizeof(Cabecera)), archivo.beg);
         Cabecera lectura;
         archivo>>lectura;
@@ -118,21 +122,26 @@ class VariableRecord{
 };
 
 int main(){
-    // creacion de archivos
-    VariableRecord vr("datos3.txt", "cabecera.dat");
-    // añadir registros
-    vr.add(Alumno{"Howard", "Paredes Zegarra", "Computacion", 1500});
-    vr.add(Alumno{"Sheldon", "Cooper Quizpe", "Mecatronica", 1850.00});
-    vr.add(Alumno{"Lidya", "Cooper Quizpe", "Computacion", 1850.00});
-    vr.add(Alumno{"Thony", "Cooper Quizpe", "Computacion", 1850.00});
-    vr.add(Alumno{"Cristian", "Cueva", "Informatica", 764.22}); 
-    // seleccionar registro n°3
-    auto r2 = vr.readRecord(2);
-    cout<<r2.Nombre<<"&&"<<r2.Apellidos<<"&&"<<r2.Carrera<<"&&"<<r2.mensualidad<<endl;
-    cout<<endl;
-    // seleccionar todos los registros
-    auto rall = vr.load();
-    for(auto i: rall)
-        cout<<i.Nombre<<"&&"<<i.Apellidos<<"&&"<<i.Carrera<<"&&"<<i.mensualidad<<endl;
+    try{
+        // creacion de archivos
+        VariableRecord vr("datos3.txt", "cabecera.dat");
+        // añadir registros
+        vr.add(Alumno{"Howard", "Paredes Zegarra", "Computacion", 1500});
+        vr.add(Alumno{"Sheldon", "Cooper Quizpe", "Mecatronica", 1850.00});
+        vr.add(Alumno{"Lidya", "Cooper Quizpe", "Computacion", 1850.00});
+        vr.add(Alumno{"Thony", "Cooper Quizpe", "Computacion", 1850.00});
+        vr.add(Alumno{"Cristian", "Cueva", "Informatica", 764.22}); 
+        // seleccionar registro n°3
+        auto r2 = vr.readRecord(2);
+        cout<<r2.Nombre<<"&&"<<r2.Apellidos<<"&&"<<r2.Carrera<<"&&"<<r2.mensualidad<<endl;
+        cout<<endl;
+        // seleccionar todos los registros
+        auto rall = vr.load();
+        for(auto i: rall)
+            cout<<i.Nombre<<"&&"<<i.Apellidos<<"&&"<<i.Carrera<<"&&"<<i.mensualidad<<endl;
+    }
+    catch(char const* c){
+        cout<<c;
+    }
 
 }

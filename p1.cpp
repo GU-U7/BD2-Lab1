@@ -104,6 +104,7 @@ private:
 int main(){
 
     try{
+        // Crear archivos
         auto f = FixedRecord("datos1.txt");
         // IMPRIMIR TODOS LOS REGISTRO
         for(auto i: f.load()) cout<<i;
@@ -114,7 +115,7 @@ int main(){
         auto a2 = f.readRecord(4);
         cout<<a2;
     }
-    catch(const char* a){
+    catch(char const* a){
         cout<<a<<endl;
     }
     

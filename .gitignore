@@ -5,6 +5,7 @@
 
 delete
 /.vscode
+/tbin
 
 # Compiled Object files
 *.slo

@@ -75,6 +75,7 @@ class VariableRecord{
         return result;
     }
     Matricula readRecord(int pos){
+        if(pos < 0) throw("No valores negativos");
         int fPos;
         ifstream f(pathCab, ios::in|ios::binary);
 

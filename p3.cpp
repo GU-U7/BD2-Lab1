@@ -87,6 +87,7 @@ class VariableRecord{
         return result;
     }
     Alumno readRecord(int pos){
+        if(pos < 0) throw("No valores negativos");
         ifstream archivo(pathCab, ios::in | ios::binary);
 
         archivo.seekg(0, archivo.end);

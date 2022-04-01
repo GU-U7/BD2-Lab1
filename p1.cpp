@@ -75,6 +75,7 @@ public:
         archivo.close();
     }
     Alumno readRecord(int pos){
+        if(pos < 0) throw("No valores negativos");
         ifstream archivo;
         archivo.open(path, ios::in);
 

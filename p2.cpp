@@ -98,6 +98,14 @@ class FixedRecord{
         ifstream f_in(path, ios::in|ios::binary);
         int last_ptr;
         f_in.read((char*) &last_ptr, sizeof(int));
+        if(last_ptr != -1){
+            int free_ptr;
+            for (int i = 1; i <= pos; i++){
+                f_in.seekg(sizeof(Alumno), ios::cur);
+                f_in.read((char*) &free_ptr, sizeof(int));
+                if(free_ptr != 0) pos++;
+            }
+        }
         f_in.close();
 
         ofstream f_out(path, ios::in|ios::binary|ios::out);
@@ -112,7 +120,7 @@ class FixedRecord{
 };
 
 void pA(Alumno a){
-    cout<<a.codigo<<"&"<<a.nombre<<"&"<<a.apellidos<<"&"<<a.carrera<<"&"<<a.ciclo<<"&"<<a.mensualidad;
+    cout<<a.codigo<<" "<<a.nombre<<" "<<a.apellidos<<" "<<a.carrera<<" "<<a.ciclo<<" "<<a.mensualidad;
 }
 
 int main(){
@@ -120,33 +128,43 @@ int main(){
     FixedRecord fr("datos2.dat");
 
     // Agregar registros
-    /* fr.add(Alumno{"a101", "cristian", "cueva vargas", "ciencia", 5, 9832.12});
+    fr.add(Alumno{"a101", "cristian", "cueva vargas", "ciencia", 5, 9832.12});
     fr.add(Alumno{"a102", "carlos", "lopez marques", "comunicacion", 5, 245.2});
     fr.add(Alumno{"a103", "gianmarco", "ramirez", "tecnologia", 7, 34});
     fr.add(Alumno{"a104", "pablo", "nolberto solano", "futbol", 25, 0.12});
-    fr.add(Alumno{"a105", "joaquin", "nolberto solano", "arte", 3, -32.12});  */
+    fr.add(Alumno{"a105", "joaquin", "nolberto solano", "arte", 3, -32.12}); 
 
     // Seleccionar registros
-    /* auto rvector = fr.load();
+    auto rvector = fr.load();
     for(auto i: rvector) {pA(i); cout<<endl;}
-    cout<<endl; */
+    cout<<endl;
 
     // Seleccionar registro
-    /* auto r = fr.readRecord(2);
+    auto r = fr.readRecord(2);
     pA(r);
-    cout<<endl; */
+    cout<<"\n\n";
 
     // Borrar registro
-    // fr.delete_reg(2);
+    fr.delete_reg(2);
+    fr.delete_reg(3);
 
     // Seleccionar registros
-    // auto rvector = fr.load();
-    // for(auto i: rvector) {pA(i); cout<<endl;}
-    // cout<<endl;
+    rvector = fr.load();
+    for(auto i: rvector) {pA(i); cout<<endl;}
+    cout<<"\n";
 
     // Seleccionar registro
-    auto r2 = fr.readRecord(0);
+    auto r2 = fr.readRecord(2);
     pA(r2);
-    cout<<endl;
+    cout<<"\n\n";
+
+    // Agregar registros
+    fr.add(Alumno{"a111", "joaquin", "nolberto solano", "arte", 3, -32.12}); 
+    fr.add(Alumno{"a150", "joaquin", "nolberto solano", "arte", 3, -32.12}); 
+
+    // Seleccionar registros
+    rvector = fr.load();
+    for(auto i: rvector) {pA(i); cout<<endl;}
+
     return 0;
 }

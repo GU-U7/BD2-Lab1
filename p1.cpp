@@ -43,9 +43,33 @@ ostream& operator<<(ostream& out, Alumno& a){
 
 istream& operator>>(istream& is, Alumno& a){
     is.read(a.codigo, sizeof(Alumno::codigo));
+    for(int i = sizeof(Alumno::codigo)-1; i>=0;  i--){
+        if(a.codigo[i] != ' ' && i <= sizeof(Alumno::codigo)-2){
+            a.codigo[i+1] = '\0';
+            break;
+        }
+    }
     is.read(a.nombre, sizeof(Alumno::nombre));
+    for(int i = sizeof(Alumno::nombre)-1; i>=0;  i--){
+        if(a.nombre[i] != ' ' && i <= sizeof(Alumno::nombre)-2){
+            a.nombre[i+1] = '\0';
+            break;
+        }
+    }
     is.read(a.apellidos, sizeof(Alumno::apellidos));
+    for(int i = sizeof(Alumno::apellidos)-1; i>=0;  i--){
+        if(a.apellidos[i] != ' ' && i <= sizeof(Alumno::apellidos)-2){
+            a.apellidos[i+1] = '\0';
+            break;
+        }
+    }
     is.read(a.carrera, sizeof(Alumno::carrera));
+    for(int i = sizeof(Alumno::carrera)-1; i>=0;  i--){
+        if(a.carrera[i] != ' ' && i <= sizeof(Alumno::carrera)-2){
+            a.carrera[i+1] = '\0';
+            break;
+        }
+    }
     is.ignore(1);
     return is;
 }
@@ -112,12 +136,12 @@ int main(){
         
         // IMPRIMIR TODOS LOS REGISTRO
         auto av = f.load();
-        for(auto i: av) cout<<i;
+        for(auto i: av) cout<<i.codigo<<" - "<<i.nombre<<" - "<<i.apellidos<<" - "<<i.carrera<<endl;
         cout<<endl;
         
-        // LEER REGISTRO 5
+        // LEER REGISTRO 6
         auto a2 = f.readRecord(5);
-        cout<<a2;
+        cout<<a2.codigo<<" - "<<a2.nombre<<" - "<<a2.apellidos<<" - "<<a2.carrera;
     }
     catch(const char* a){
         cout<<a<<endl;
